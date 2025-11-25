@@ -4,8 +4,8 @@ class Hand:
     # Represents a specific hand of two playing cards.
     # Must contain exactly two unique cards.
 
-    def __init__(self):
-        self.cards = []
+    def __init__(self, cards=None):
+        self.cards = cards if cards is not None else []
 
     def add_card(self, card):
         if len(self.cards) >= 2:
@@ -16,7 +16,8 @@ class Hand:
         self.cards.append(card)
 
     def __repr__(self):
-        return "Hand({})".format([Card.int_to_str(card) for card in self.cards])
+        cards = [Card.int_to_str(card) for card in self.cards]
+        return ''.join(cards)
 
     
 

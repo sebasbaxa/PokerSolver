@@ -1,87 +1,79 @@
 from treys import Evaluator, Card
 from src.core.deck import Deck
 from src.core.hand import Hand
+from src.core.range import Range
+from src.game.player_range import PlayerRange
 
 
 class GameState:
-    # Represents the current state of a poker game.
-    # This includes the deck, community cards, and two players hands.
+    # Represents the current state of a poker game for one position
+    # The current palyer knows their hand and the community cards, but are modeled against an opponent range
 
-    def __init__(self):
+    def __init__(self, player, player_hand, opponent_range):
         # initialize the deck and empty community cards and player hands
         self.deck = Deck()
         self.community_cards = []
 
-        self.OOP_hand = Hand()
-        self.OOP_stack = 0
-        self.OOP_contribution = 0
+        self.player = player # 'OOP' or 'IP'
+        self.player_hand = player_hand
+        self.player_stack = 0
+        self.player_contribution = 0
 
-        self.IP_hand = Hand()
-        self.IP_stack = 0
-        self.IP_contribution = 0
+        self.opponent_range = opponent_range
+        self.opponent_stack = 0
+        self.opponent_contribution = 0
 
         self.pot = 0
 
+    def set_opponent_range(self, opponent_range):
+        if not isinstance(opponent_range, PlayerRange):
+            raise ValueError("Opponent range must be a PlayerRange instance.")
+        if opponent_range.id == self.player:
+            raise ValueError("Opponent range ID must be different from the player's ID.")
 
-    def add_hand(self, hand, id):
-        # add a hand for the specified player and remove the cards from the deck
+        self.opponent_range = opponent_range
+
+    def add_player_hand(self, hand):
         if not isinstance(hand, Hand):
-            raise ValueError("Only Hand instances can be added as player hands.")
-
-        self.deck.remove_hand(hand)
-
-        if id == 'OOP':
-            self.OOP_hand = hand
-        elif id == 'IP':
-            self.IP_hand = hand
-        else:
-            raise ValueError("Invalid player ID. Use 'OOP' or 'IP'.")
-    
-
-    def add_bet(self, amount, id):
-        # add a bet for the specified player and update their stack and contribution
-        if id == 'OOP':
-            if amount > self.OOP_stack:
-                raise ValueError("OOP does not have enough stack to bet this amount.")
-            self.OOP_stack -= amount
-            self.OOP_contribution += amount
-        elif id == 'IP':
-            if amount > self.IP_stack:
-                raise ValueError("IP does not have enough stack to bet this amount.")
-            self.IP_stack -= amount
-            self.IP_contribution += amount
-        else:
-            raise ValueError("Invalid player ID. Use 'OOP' or 'IP'.")
-
-        self.pot += amount
-
+            raise ValueError("Only Hand instances can be added as player hand.")
+        
+        self.player_hand = hand
+        # remove the player's cards from the deck
+        for card in hand.cards:
+            self.deck.remove_card(card)
 
     def add_community_card(self, card):
-        # add a card to the community cards and remove it from the deck
-        if not card in self.deck.cards:
-            raise ValueError("This card is not available in the deck.")
-        
-        self.deck.remove_card(card)
-        
         self.community_cards.append(card)
-
-
+        self.deck.remove_card(card)
+    
     def evaluate(self):
-        # if there are not enough community cards, return None
-        if len(self.community_cards) < 5:
-            return None
-        
         evaluator = Evaluator()
-        OOP_score = evaluator.evaluate(self.community_cards, self.OOP_hand.cards)
-        IP_score = evaluator.evaluate(self.community_cards, self.IP_hand.cards)
+        player_score = evaluator.evaluate(self.player_hand.cards, self.community_cards)
 
-        # return the ID if the player with the better hand, else return 'TIE'
-        if OOP_score < IP_score:
-            return 'OOP'
-        elif IP_score < OOP_score:
-            return 'IP'
-        else:
-            return 'TIE'
+        player_wins = 0
+        ties = 0
+        total = 0
+
+        for opponent_hand in self.opponent_range.get_hands():
+            opponent_score = evaluator.evaluate(opponent_hand.cards, self.community_cards)
+            total += 1
+            if player_score < opponent_score:
+                player_wins += 1
+            elif player_score == opponent_score:
+                ties += 1
+
+        # return the results of the players hand against the opponent range
+        return {
+                'wins': player_wins,
+                'ties': ties,
+                'total': total,
+                }
+
+    
+
+        
+
+        
 
     
     

@@ -10,7 +10,7 @@ class Node:
         # the id will a int that represents the position and hand so they are unique
         self.states = {}
 
-        
+        self.turn = None # 'OOP' or 'IP'
         self.regret = {"call":0, "raise":0, "fold":0}
         self.strategy = {"call":0, "raise":0, "fold":0}
         self.ev = {"call":0, "raise":0, "fold":0}

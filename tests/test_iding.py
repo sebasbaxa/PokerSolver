@@ -1,5 +1,5 @@
 import unittest
-from src.tree.create_states import create_ids
+from src.tree.id import create_ids, get_hand_from_id
 from src.game.player_range import PlayerRange
 
 class TestCreateIds(unittest.TestCase):
@@ -12,10 +12,18 @@ class TestCreateIds(unittest.TestCase):
         ip_range.add_suited_cards('K', 'Q')  # KQs
 
         ids = create_ids(oop_range, ip_range)
-        self.assertEqual(len(ids), 24)  # 6 combinations of AA * 4 combinations of KQs = 24 unique IDs
+        self.assertEqual(len(ids), 10) # there should be 6 (AA) + 4 (KQs) = 10 unique IDs
 
         duplicate_check = set(ids)
         self.assertEqual(len(duplicate_check), len(ids))  # Ensure all IDs are unique
+
+    def test_get_hand_from_id(self):
+        hand_id = "OOPAsKd"
+        hand = get_hand_from_id(hand_id) 
+        self.assertEqual(str(hand), "AsKd")  # Check if the reconstructed hand matches the original
+        
+
+
 
 if __name__ == "__main__":
     unittest.main()

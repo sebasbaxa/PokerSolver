@@ -6,7 +6,7 @@ from src.core.hand import Hand
 class PlayerRange:
     # Represents the range of hand for a specific id
 
-    def __init__(self, id):
+    def __init__(self, id=None):
         self.id = id  # 'OOP' or 'IP'
         self.range = Range()
     
