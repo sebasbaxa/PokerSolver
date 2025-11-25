@@ -67,6 +67,8 @@ class TestGameState(unittest.TestCase):
         winner = game.evaluate()
         self.assertEqual(winner, 'OOP')  # OOP has a better hand with Ace pair
 
+if __name__ == "__main__":
+    unittest.main()
         
 
 

@@ -17,6 +17,9 @@ class PlayerRange:
             raise ValueError("This hand is already in the player range.")
 
         self.range.add_hand(hand)
+    
+    def get_hands(self):
+        return self.range.get_hands()
 
     def add_pocket_pair(self, rank):
         # Adds all combinations of pocket pairs for the given rank to the range
