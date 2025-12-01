@@ -1,7 +1,7 @@
 from treys import Card
 from src.core.hand import Hand
 
-def create_ids(oop_range, ip_range):
+def create_ids(oop_range, ip_range) -> list:
     # Create unique IDs for all of the hands in each players range
     ids = []
 
@@ -13,7 +13,7 @@ def create_ids(oop_range, ip_range):
     
     return ids
 
-def get_hand_from_id(hand_id):
+def get_hand_from_id(hand_id) -> Hand:
     # Reconstruct a Hand object from its unique ID
     cards = []
     if hand_id[0] == 'O':

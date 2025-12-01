@@ -16,16 +16,16 @@ class GameState:
 
         self.player = player # 'OOP' or 'IP'
         self.player_hand = player_hand
-        self.player_stack = 0
-        self.player_contribution = 0
 
         self.opponent_range = opponent_range
-        self.opponent_stack = 0
-        self.opponent_contribution = 0
+
+        self.regret = {"call":0.33, "raise":0.33, "fold":0.33}
+        self.strategy = {"call":0.33, "raise":0.33, "fold":0.33}
+        self.ev = {"call":0.33, "raise":0.33, "fold":0.33}
 
         self.pot = 0
 
-    def set_opponent_range(self, opponent_range):
+    def set_opponent_range(self, opponent_range) -> None:
         if not isinstance(opponent_range, PlayerRange):
             raise ValueError("Opponent range must be a PlayerRange instance.")
         if opponent_range.id == self.player:
@@ -33,7 +33,7 @@ class GameState:
 
         self.opponent_range = opponent_range
 
-    def add_player_hand(self, hand):
+    def add_player_hand(self, hand) -> None:
         if not isinstance(hand, Hand):
             raise ValueError("Only Hand instances can be added as player hand.")
         
@@ -42,11 +42,11 @@ class GameState:
         for card in hand.cards:
             self.deck.remove_card(card)
 
-    def add_community_card(self, card):
+    def add_community_card(self, card) -> None:
         self.community_cards.append(card)
         self.deck.remove_card(card)
     
-    def evaluate(self):
+    def evaluate(self) -> dict:
         evaluator = Evaluator()
         player_score = evaluator.evaluate(self.player_hand.cards, self.community_cards)
 
