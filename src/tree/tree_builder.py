@@ -48,9 +48,7 @@ class TreeBuilder:
         #TODO: implement recursive tree building
         pass
 
-    # recursively build the tree from a given node
-    def recurse(self, node):
-        #TODO: implement recursive tree building and street progression
+    def create_children(self, node) -> None:
 
         # dont create any children for terminal nodes
         if node.state == 'terminal':

@@ -19,6 +19,7 @@ class GameState:
 
         self.opponent_range = opponent_range
 
+        # starting values
         self.regret = {"call":0.33, "raise":0.33, "fold":0.33}
         self.strategy = {"call":0.33, "raise":0.33, "fold":0.33}
         self.ev = {"call":0.33, "raise":0.33, "fold":0.33}
