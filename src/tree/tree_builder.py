@@ -45,8 +45,16 @@ class TreeBuilder:
     # Generate the full game tree starting from the root node
     def generate_tree(self):
         self.root = self.create_root_node()
-        #TODO: implement recursive tree building
-        pass
+        self.recursive_build(self.root)
+    
+    # recursively build the tree
+    def recursive_build(self, node):
+        if node.state == 'terminal':
+            return
+        
+        self.create_children(node)
+        for child in node.children:
+            self.recursive_build(child)
 
     def create_children(self, node) -> None:
 
@@ -63,5 +71,5 @@ class TreeBuilder:
         node.children.append(call_child)
 
         # Raise child
-        raise_child = create_raise_child(node, raise_amount=None)
+        raise_child = create_raise_child(node)
         node.children.append(raise_child)
