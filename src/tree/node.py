@@ -12,7 +12,7 @@ class Node:
 
         self.turn = turn # 'OOP' or 'IP'
         self.street = street # 'flop', 'turn', 'river'
-        self.state = state # 'terminal' or 'action'
+        self.state = state # 'action 'allin' 'fold' or 'showdown
         self.raise_count = 0
 
         self.stacks = stacks  # {'OOP': int, 'IP': int}

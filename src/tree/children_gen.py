@@ -1,24 +1,23 @@
 # Function to create children for a node in the game tree
 # Children will be fold, call/check, raise nodes
-#TODO: fix states, to include fold and showdown since we will need the difference
 from src.tree.node import Node
 
 def create_fold_child(node) -> Node:
-    fold_child = Node('IP' if node.turn == 'IP' else 'OOP', 'terminal', node.street,
+    fold_child = Node('IP' if node.turn == 'IP' else 'OOP', 'fold', node.street,
                       node.stacks, node.contributions, node.pot)
     return fold_child
 
 def create_call_child(node) -> Node:
 
     if node.state == 'allin':
-        # the previous node was allin so this call child is just a terminal node
+        # the previous node was allin so this call child is just a showdown node
         call_amount = node.contributions['OOP' if node.turn == 'IP' else 'IP'] - node.contributions[node.turn]
         new_contributions = node.contributions.copy()
         new_contributions[node.turn] += call_amount
         new_stacks = node.stacks.copy()
         new_stacks[node.turn] -= call_amount
         new_pot = node.pot + call_amount
-        call_child = Node(node.turn, 'terminal', node.street,
+        call_child = Node(node.turn, 'showdown', node.street,
                           new_stacks, new_contributions, new_pot)
         return call_child
 
@@ -29,7 +28,7 @@ def create_call_child(node) -> Node:
         # IP check logic
         # IP check on last street
         if node.street == 'river' and node.turn == 'IP':
-            call_child = Node(node.turn, 'terminal', node.street,
+            call_child = Node(node.turn, 'showdown', node.street,
                            node.stacks, node.contributions, node.pot)
             return call_child
         
@@ -77,7 +76,7 @@ def create_call_child(node) -> Node:
 
         # river call logic
         if node.street == 'river':
-            call_child = Node(node.turn, 'terminal', node.street,
+            call_child = Node(node.turn, 'showdown', node.street,
                            new_stacks, new_contributions, new_pot)
             return call_child
 
@@ -188,7 +187,7 @@ def create_raise_child(node) -> Node:
         elif node.street == 'turn':
             next_street = 'river'
         else:
-            raise_child = Node(node.turn, 'terminal', node.street,
+            raise_child = Node(node.turn, 'showdown', node.street,
                         new_stacks, new_contributions, new_pot)
             return raise_child
         

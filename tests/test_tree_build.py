@@ -51,7 +51,7 @@ class TestCreateRootNode(unittest.TestCase):
         tree_builder.create_children(root_node)
 
         self.assertEqual(len(root_node.children), 3)  # fold, call/check, raise
-        self.assertEqual(root_node.children[0].state, 'terminal')  # fold child should be terminal
+        self.assertEqual(root_node.children[0].state, 'fold')  # fold child should be terminal
 
         # call/check child tests
         self.assertEqual(root_node.children[1].turn, 'IP')    # call/check child should be action
@@ -110,7 +110,7 @@ class TestCreateRootNode(unittest.TestCase):
         self.assertIsNotNone(tree_builder.root)
 
         def dfs_count_children(node):
-            if node.state == 'terminal':
+            if node.state == 'showdown' or node.state == 'fold':
                 return
             self.assertEqual(len(node.children), 3)  # each non-terminal node should have 3 children
             for child in node.children:

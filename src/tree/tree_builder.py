@@ -1,6 +1,6 @@
 from src.tree.node import Node
 from src.game.gamestate import GameState
-from src.tree.id import create_ids, get_hand_from_id
+from src.core.id import create_ids, get_hand_from_id
 from src.tree.children_gen import create_fold_child, create_call_child, create_raise_child
 
 
@@ -49,7 +49,7 @@ class TreeBuilder:
     
     # recursively build the tree
     def recursive_build(self, node):
-        if node.state == 'terminal':
+        if node.state == 'showdown' or node.state == 'fold':
             return
         
         self.create_children(node)
@@ -59,7 +59,7 @@ class TreeBuilder:
     def create_children(self, node) -> None:
 
         # dont create any children for terminal nodes
-        if node.state == 'terminal':
+        if node.state == 'showdown' or node.state == 'fold':
             return
         
         # Create fold child

@@ -1,5 +1,5 @@
 import unittest
-from src.tree.id import create_ids, get_hand_from_id
+from src.core.id import create_ids, get_hand_from_id
 from src.game.player_range import PlayerRange
 
 class TestCreateIds(unittest.TestCase):
