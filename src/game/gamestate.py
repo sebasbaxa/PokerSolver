@@ -1,3 +1,4 @@
+from typing import Any
 from treys import Evaluator, Card
 from src.core.deck import Deck
 from src.core.hand import Hand
@@ -16,15 +17,16 @@ class GameState:
 
         self.player = player # 'OOP' or 'IP'
         self.player_hand = player_hand
+        for card in player_hand.cards:
+            self.deck.remove_card(card)
 
         self.opponent_range = opponent_range
 
         # starting values
-        self.regret = {"call":0.33, "raise":0.33, "fold":0.33}
-        self.strategy = {"call":0.33, "raise":0.33, "fold":0.33}
-        self.ev = {"call":0.33, "raise":0.33, "fold":0.33}
-
-        self.pot = 0
+        self.value = 0.0
+        self.regret = {"call":0, "raise":0, "fold":0}
+        self.strategy = {"call":0.333, "raise":0.333, "fold":0.333}
+        self.evs = {"call":0, "raise":0, "fold":0}
 
     def set_opponent_range(self, opponent_range) -> None:
         if not isinstance(opponent_range, PlayerRange):
@@ -46,6 +48,10 @@ class GameState:
     def add_community_card(self, card) -> None:
         self.community_cards.append(card)
         self.deck.remove_card(card)
+    
+    def add_community_cards(self, cards) -> None:
+        for card in cards:
+            self.add_community_card(card)
     
     def evaluate(self) -> dict:
         evaluator = Evaluator()
@@ -70,6 +76,8 @@ class GameState:
                 'total': total,
                 }
 
+    def __repr__(self) -> str:
+        return f"GameState(player={self.player}, player_hand={self.player_hand},  strategy={self.strategy})\n"
     
 
         

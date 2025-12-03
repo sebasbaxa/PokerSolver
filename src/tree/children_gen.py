@@ -1,13 +1,15 @@
 # Function to create children for a node in the game tree
 # Children will be fold, call/check, raise nodes
 from src.tree.node import Node
+import copy
 
-def create_fold_child(node) -> Node:
+def create_fold_child(node: Node) -> Node:
     fold_child = Node('IP' if node.turn == 'IP' else 'OOP', 'fold', node.street,
                       node.stacks, node.contributions, node.pot)
+    fold_child.states = copy.deepcopy(node.states)  # carry over states
     return fold_child
 
-def create_call_child(node) -> Node:
+def create_call_child(node: Node) -> Node:
 
     if node.state == 'allin':
         # the previous node was allin so this call child is just a showdown node
@@ -19,6 +21,7 @@ def create_call_child(node) -> Node:
         new_pot = node.pot + call_amount
         call_child = Node(node.turn, 'showdown', node.street,
                           new_stacks, new_contributions, new_pot)
+        call_child.states = copy.deepcopy(node.states)  # carry over states
         return call_child
 
 
@@ -30,6 +33,7 @@ def create_call_child(node) -> Node:
         if node.street == 'river' and node.turn == 'IP':
             call_child = Node(node.turn, 'showdown', node.street,
                            node.stacks, node.contributions, node.pot)
+            call_child.states = copy.deepcopy(node.states)  # carry over states
             return call_child
         
         # moving streets after IP check
@@ -41,12 +45,15 @@ def create_call_child(node) -> Node:
             # Create child node for next street
             call_child = Node('OOP', 'action', next_street,
                            node.stacks, node.contributions, node.pot)
+            call_child.raise_count = 0 # reset raise count
+            call_child.states = copy.deepcopy(node.states)  # carry over states
             return call_child
 
         # OOP check logic
         else:
             call_child = Node('IP', 'action', node.street,
                             node.stacks, node.contributions, node.pot)
+            call_child.states = copy.deepcopy(node.states)  # carry over states
             return call_child
         
     # Call case
@@ -65,6 +72,7 @@ def create_call_child(node) -> Node:
             new_pot = node.pot + call_amount
             call_child = Node(node.turn, 'allin', node.street,
                            new_stacks, new_contributions, new_pot)
+            call_child.states = copy.deepcopy(node.states)  # carry over states
             return call_child
 
         # Normal call case
@@ -78,6 +86,7 @@ def create_call_child(node) -> Node:
         if node.street == 'river':
             call_child = Node(node.turn, 'showdown', node.street,
                            new_stacks, new_contributions, new_pot)
+            call_child.states = copy.deepcopy(node.states)  # carry over states
             return call_child
 
         # IP call logic
@@ -90,16 +99,17 @@ def create_call_child(node) -> Node:
             call_child = Node('OOP', 'action', next_street,
                            new_stacks, new_contributions, new_pot)
             call_child.raise_count = 0 # reset raise count
+            call_child.states = copy.deepcopy(node.states)  # carry over states
             return call_child
         
         # OOP call logic
         else:
             call_child = Node('IP', 'action', node.street,
                             new_stacks, new_contributions, new_pot)
-            
+            call_child.states = copy.deepcopy(node.states)  # carry over states
             return call_child
 
-def create_raise_child(node) -> Node:
+def create_raise_child(node: Node) -> Node:
 
     if node.state == 'allin':
         # cannot raise from allin state, so create call child instead
@@ -121,6 +131,7 @@ def create_raise_child(node) -> Node:
             raise_child = Node('IP' if node.turn == 'OOP' else 'OOP', 'allin', node.street,
                             new_stacks, new_contributions, new_pot)
             raise_child.raise_count = node.raise_count + 1
+            raise_child.states = copy.deepcopy(node.states)  # carry over states
             return raise_child
 
         # Normal first raise case
@@ -132,6 +143,7 @@ def create_raise_child(node) -> Node:
 
         raise_child = Node('IP' if node.turn == 'OOP' else 'OOP', 'action', node.street,
                         new_stacks, new_contributions, new_pot)
+        raise_child.states = copy.deepcopy(node.states)  # carry over states
         raise_child.raise_count = node.raise_count + 1
         return raise_child
 
@@ -151,6 +163,7 @@ def create_raise_child(node) -> Node:
             new_stacks[node.turn] -= raise_amount  # should be 0
             raise_child = Node('IP' if node.turn == 'OOP' else 'OOP', 'allin', node.street,
                             new_stacks, new_contributions, new_pot)
+            raise_child.states = copy.deepcopy(node.states)  # carry over states
             raise_child.raise_count = node.raise_count + 1
             return raise_child
         
@@ -162,6 +175,7 @@ def create_raise_child(node) -> Node:
         new_stacks[node.turn] -= raise_amount
         raise_child = Node('IP' if node.turn == 'OOP' else 'OOP', 'action', node.street,
                         new_stacks, new_contributions, new_pot)
+        raise_child.states = copy.deepcopy(node.states)  # carry over states
         raise_child.raise_count = node.raise_count + 1
         return raise_child
 
@@ -189,9 +203,11 @@ def create_raise_child(node) -> Node:
         else:
             raise_child = Node(node.turn, 'showdown', node.street,
                         new_stacks, new_contributions, new_pot)
+            raise_child.states = copy.deepcopy(node.states)  # carry over states
             return raise_child
         
         raise_child = Node('OOP', 'action', next_street,
                         new_stacks, new_contributions, new_pot)    
         raise_child.raise_count = 0 # reset raise count
+        raise_child.states = copy.deepcopy(node.states)  # carry over states
     return raise_child

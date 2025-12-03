@@ -18,4 +18,4 @@ class Node:
         self.stacks = stacks  # {'OOP': int, 'IP': int}
         self.contributions = contributions  # {'OOP': int, 'IP': int}
         self.pot = pot
-        self.children = []  # child nodes [0 = fold, 1 = call/check, 2 = raise]
+        self.children = {}

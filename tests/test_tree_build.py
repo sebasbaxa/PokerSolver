@@ -51,19 +51,19 @@ class TestCreateRootNode(unittest.TestCase):
         tree_builder.create_children(root_node)
 
         self.assertEqual(len(root_node.children), 3)  # fold, call/check, raise
-        self.assertEqual(root_node.children[0].state, 'fold')  # fold child should be terminal
+        self.assertEqual(root_node.children['fold'].state, 'fold')  # fold child should be terminal
 
         # call/check child tests
-        self.assertEqual(root_node.children[1].turn, 'IP')    # call/check child should be action
-        self.assertEqual(root_node.children[1].pot, pot)
-        self.assertEqual(root_node.children[1].stacks, {'OOP': 1000, 'IP': 1000})  # IP called 50
+        self.assertEqual(root_node.children['call'].turn, 'IP')    # call/check child should be action
+        self.assertEqual(root_node.children['call'].pot, pot)
+        self.assertEqual(root_node.children['call'].stacks, {'OOP': 1000, 'IP': 1000})  # IP called 50
 
         # raise child tests
-        self.assertEqual(root_node.children[2].turn, 'IP')    # raise child should be action
-        self.assertEqual(root_node.children[2].pot, 150)
-        self.assertEqual(root_node.children[2].stacks, {'OOP': 950, 'IP': 1000})  # OOP raised 50
-        self.assertEqual(root_node.children[2].contributions, {'OOP': 100, 'IP': 50})  # OOP contributed 100
-        self.assertEqual(root_node.children[2].raise_count, 1)  # raise count should be incremented
+        self.assertEqual(root_node.children['raise'].turn, 'IP')    # raise child should be action
+        self.assertEqual(root_node.children['raise'].pot, 150)
+        self.assertEqual(root_node.children['raise'].stacks, {'OOP': 950, 'IP': 1000})  # OOP raised 50
+        self.assertEqual(root_node.children['raise'].contributions, {'OOP': 100, 'IP': 50})  # OOP contributed 100
+        self.assertEqual(root_node.children['raise'].raise_count, 1)  # raise count should be incremented
     
     def test_re_raise_nodes(self):
         oop_range = PlayerRange('OOP')
@@ -81,11 +81,11 @@ class TestCreateRootNode(unittest.TestCase):
     
         root_node = tree_builder.create_root_node()
         raise1 = create_raise_child(root_node)  # OOP raises
-        root_node.children.append(raise1)
+        root_node.children['raise'] = raise1
         raise2 = create_raise_child(raise1)    # IP re-raises
-        raise1.children.append(raise2)
+        raise1.children['raise'] = raise2
         raise3 = create_raise_child(raise2)    # OOP re-re-raises
-        raise2.children.append(raise3) # this child should now be on the next street
+        raise2.children['raise'] = raise3 # this child should now be on the next street
         self.assertEqual(raise3.street, 'turn')
         self.assertEqual(raise3.raise_count, 0)  # raise count should reset on new street
         self.assertEqual(raise3.turn, 'OOP')
@@ -112,8 +112,9 @@ class TestCreateRootNode(unittest.TestCase):
         def dfs_count_children(node):
             if node.state == 'showdown' or node.state == 'fold':
                 return
+            self.assertEqual(len(node.states), 10)  # each node should have 10 gamestates
             self.assertEqual(len(node.children), 3)  # each non-terminal node should have 3 children
-            for child in node.children:
+            for action, child in node.children.items():
                 dfs_count_children(child)
 
         # check all non-terminal nodes have 3 children
