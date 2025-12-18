@@ -48,10 +48,18 @@ def create_win_cache(IPrange: PlayerRange, OOPrange: PlayerRange, root: Node) ->
 
     # every hand in IP's range
     for ip_hand in IPrange.get_hands():
+        # check if hand is valid with flop
+        if any(card in flop for card in ip_hand.cards):
+            continue
+
         win_cache["IP"+ str(ip_hand)] = {}
 
         # every hand in OOP's range
         for oop_hand in OOPrange.get_hands():
+            # check if hand is valid with flop
+            if any(card in flop for card in oop_hand.cards):
+                continue
+
             win_cache["IP"+ str(ip_hand)]["OOP"+ str(oop_hand)] = {'IP_wins':0, 'OOP_wins':0, 'ties':0}
             if "OOP"+ str(oop_hand) not in win_cache:
                 win_cache["OOP"+ str(oop_hand)] = {}

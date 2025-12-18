@@ -19,8 +19,6 @@ class GameState:
 
         self.player = player # 'OOP' or 'IP'
         self.player_hand = player_hand
-        for card in player_hand.cards:
-            self.deck.remove_card(card)
 
         self.opponent_range = opponent_range
 
