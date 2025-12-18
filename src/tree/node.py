@@ -1,21 +1,34 @@
 from src.game.gamestate import GameState
 from src.game.player_range import PlayerRange
 
-# Node will cointain a seperate gamestate for hand in a players range and for each node in the gametree
+#
 
 class Node:
     def __init__(self, turn, state, street, stacks, contributions, pot):
-        # we will have a gamestate for each possible combination of player hand at this node
-        # each hand compination will be assinged an id which maps to a gamestate
-        # the id will a int that represents the position and hand so they are unique
+        # Nodes cotain a mapping of every hand_id to their gamestate
         self.states = {}
+
+        # mapping of hand_id to reach probability
+        # dict structure: reach = { '<hand_id>': float }
+        self.reach: dict[str, float] = {}
 
         self.turn = turn # 'OOP' or 'IP'
         self.street = street # 'flop', 'turn', 'river'
         self.state = state # 'action 'allin' 'fold' or 'showdown
+
+        # count of raises on this street at this node
         self.raise_count = 0
 
         self.stacks = stacks  # {'OOP': int, 'IP': int}
         self.contributions = contributions  # {'OOP': int, 'IP': int}
         self.pot = pot
-        self.children = {}
+        self.children = {} # action:str -> Node | to be populated later
+    
+    def __repr__(self) -> str:
+        output =  f"Node: turn={self.turn}, street={self.street}, state={self.state}, pot={self.pot}, stacks={self.stacks}, contributions={self.contributions}\n"
+        for id, reach_prob in self.reach.items():
+            output += f"  Hand ID: {id}, Reach Probability: {reach_prob}\n"
+        output += "\n States:\n"
+        for state_id, gamestate in self.states.items():
+            output += f"  State ID: {state_id}, Gamestate: {gamestate}\n"
+        return output

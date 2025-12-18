@@ -1,62 +1,191 @@
 from typing import Any
-from src.cfr.winrates import calculate_winrates
+from src.cfr import winrates
+from src.cfr.winrates import create_win_cache, sample_hand_by_reach
 from src.tree.node import Node
+from treys import evaluator
+import random
 
+
+#TODO: compine calc values into one funcion with position parameter reducing code duplication
+
+# Class containing methods to perform CFR calculations
 class CFRSolver:
-    def __init__(self, root: Node):
+    def __init__(self, root: Node, win_cache: dict) -> None:
         self.root = root
-        self.winrates = calculate_winrates(self.root)
+        self.win_cache = win_cache
 
-    def calc_values(self, node: Node) -> None:
 
-        # calculate terminal node values
-        if node.state == 'showdown':
-            for hand_id, gamestate in node.states.items():
-                winrate_info = self.winrates[hand_id]
-                wins = winrate_info['wins']
-                ties = winrate_info['ties']
-                total = winrate_info['total']
-                winrate = wins / total if total > 0 else 0
-                tierate = ties / total if total > 0 else 0
-                lossrate = 1 - winrate - tierate
-                value = (winrate * node.pot) + (tierate * node.pot * 0.5) - (lossrate * node.pot)
-                gamestate.value = value
-            
-        elif node.state == 'fold':
-            folder = 'IP' if node.turn == 'IP' else 'OOP'  # the player who folded is opposite of node.turn
-            for hand_id, gamestate in node.states.items():
-                if gamestate.player == folder:
-                    gamestate.value = 0 # folder gets nothing
-                else:
-                    gamestate.value = node.pot  # non-folder gets the pot
+    #TODO: Combine this function and the calc_OOP_values function to reduce code duplication
+    def calc_IP_values(self, node: Node) -> None:
+        # We are going to use the concept of monte carlo cfr here
+        # so since we dont know the exact hands the OOP player has
+        # we will take a random hand from their range and use their as their strategy
+        # this hand will change at each interation of cfr
+
+
+        def dfs(curr: Node) -> None:
+            if curr.state == 'fold':
+                for hand_id, gamestate in curr.states.items():
+                    if gamestate.player != 'IP':
+                        continue
+                    if curr.turn == 'OOP':
+                        # if OOP folded, IP wins the pot
+                        gamestate.value = curr.contributions['OOP']
+                    else:
+                        # if IP folded, OOP wins the pot
+                        gamestate.value = -curr.contributions['IP']
+                return
+            elif curr.state == 'showdown':
+
+                for hand_id, gamestate in curr.states.items():
+                    if gamestate.player != 'IP':
+                        continue
+
+                    # get winrate
+                    win_data = {'wins':0, 'ties':0, 'total':0}  
+                    info = self.win_cache.get(hand_id, {})
+                    for oop_hand_id, opp_info in info.items():
+                        oop_reach = curr.reach.get(oop_hand_id, 0.0)
+                        win_data['wins'] += opp_info['IP_wins'] * oop_reach
+                        win_data['ties'] += opp_info['ties'] * oop_reach
+                        win_data['total'] += (opp_info['IP_wins'] + opp_info['OOP_wins'] + opp_info['ties']) * oop_reach
+                    if win_data['total'] == 0:
+                        gamestate.value = 0.0
+                    else:
+                        gamestate.value = ((win_data['wins'] / win_data['total'] * curr.pot) + (win_data['ties'] / win_data['total']) * (curr.pot / 2)) - curr.contributions['OOP']
+                    
+                return
+            if curr.turn == 'IP':
+                # IP's turn to act
+
+                for action, child in curr.children.items():
+                    dfs(child)
+                
+                for hand_id, gamestate in curr.states.items():
+                    if gamestate.player != 'IP':
+                        continue
+                    ev = 0.0
+                    for action, child in curr.children.items():
+                        child_gamestate = child.states[hand_id]
+                        gamestate.evs[action] = child_gamestate.value
+                        ev += gamestate.strategy[action] * child_gamestate.value
+                    gamestate.value = ev
+                
+                for hand_id, gamestate in curr.states.items():
+                    if gamestate.player != 'IP':
+                        continue
+                    for action in ['fold', 'call', 'raise']:
+                        gamestate.regret[action] += gamestate.evs[action] - gamestate.value
+            else:
+                # OOP's turn to act
+                for action, child in curr.children.items():
+                    dfs(child)
+                
+                oop_gamestate = curr.states[sample_hand_by_reach(curr, "OOP")]
+
+                for hand_id, gamestate in curr.states.items():
+                    if gamestate.player != 'IP':
+                        continue
+                    ev = 0.0
+                    for action, child in curr.children.items():
+                        child_gamestate = child.states[hand_id]
+                        gamestate.evs[action] = child_gamestate.value
+                        ev += oop_gamestate.strategy[action] * child_gamestate.value
+                    gamestate.value = ev
+                
         
-        else:
-            if len(node.children) < 3:
-                print(node.children)
-                raise ValueError("Node must have 3 children to calculate values.")
-            for action, child in node.children.items():
-                self.calc_values(child)
+        # start the dfs from the root node
+        dfs(node)
+                
+    
+    def calc_OOP_values(self, node: Node) -> None:
             
-            for hand_id, gamestate in node.states.items():
-                for action, child in node.children.items():
-                    child_gamestate = child.states[hand_id]
-                    gamestate.evs[action] = child_gamestate.value
-                # calculate expected value based on current strategy
-                ev = 0.0
-                for action, prob in gamestate.strategy.items():
-                    ev += prob * gamestate.evs[action]
-                gamestate.value = ev
-                # calculate regrets
-                for action in gamestate.strategy.keys():
-                    regret = gamestate.evs[action] - gamestate.value
-                    gamestate.regret[action] = regret
 
-    def recalc_strategies(self, node: Node) -> None:
+        def dfs(curr: Node) -> None:
+            if curr.state == 'fold':
+                for hand_id, gamestate in curr.states.items():
+                    if gamestate.player != 'OOP':
+                        continue
+                    if curr.turn == 'IP':
+                        # if IP folded, OOP wins the pot
+                        gamestate.value = curr.contributions['IP']
+                    else:
+                        # if OOP folded, IP wins the pot
+                        gamestate.value = -curr.contributions['OOP']
+                return
+            elif curr.state == 'showdown':
+                for hand_id, gamestate in curr.states.items():
+                    if gamestate.player != 'OOP':
+                        continue
+
+                    # get winrate
+                    win_data = {'wins':0, 'ties':0, 'total':0}
+                    info = self.win_cache.get(hand_id, {})
+                    for ip_hand_id, opp_info in info.items():
+                        ip_reach = curr.reach.get(ip_hand_id, 0.0)
+                        win_data['wins'] += opp_info['OOP_wins'] * ip_reach
+                        win_data['ties'] += opp_info['ties'] * ip_reach
+                        win_data['total'] += (opp_info['IP_wins'] + opp_info['OOP_wins'] + opp_info['ties']) * ip_reach
+                    if win_data['total'] == 0:
+                        gamestate.value = 0.0
+                    else:
+                        gamestate.value = ((win_data['wins'] / win_data['total'] * curr.pot) + (win_data['ties'] / win_data['total']) * (curr.pot / 2)) - curr.contributions['IP']
+                    
+                return
+            if curr.turn == 'OOP':
+                # OOP's turn to act
+                for action, child in curr.children.items():
+                    dfs(child)
+                
+                for hand_id, gamestate in curr.states.items():
+                    if gamestate.player != 'OOP':
+                        continue
+                    ev = 0.0
+                    for action, child in curr.children.items():
+                        child_gamestate = child.states[hand_id]
+                        gamestate.evs[action] = child_gamestate.value
+                        ev += gamestate.strategy[action] * child_gamestate.value
+                    gamestate.value = ev
+                
+                for hand_id, gamestate in curr.states.items():
+                    if gamestate.player != 'OOP':
+                        continue
+                    for action in ['fold', 'call', 'raise']:
+                        gamestate.regret[action] += gamestate.evs[action] - gamestate.value
+            else:
+                # IP's turn to act
+                for action, child in curr.children.items():
+                    dfs(child)
+                
+                ip_gamestate = curr.states[sample_hand_by_reach(curr, "IP")]
+
+                for hand_id, gamestate in curr.states.items():
+                    if gamestate.player != 'OOP':
+                        continue
+                    ev = 0.0
+                    for action, child in curr.children.items():
+                        child_gamestate = child.states[hand_id]
+                        gamestate.evs[action] = child_gamestate.value
+                        ev += ip_gamestate.strategy[action] * child_gamestate.value
+                    gamestate.value = ev
+        
+        # start the dfs from the root node
+        dfs(node)
+
+    def calc_stratagy(self, node: Node, position: str) -> None:
         if node.state == 'showdown' or node.state == 'fold':
+            return
+        
+        if node.turn != position:
+            for child in node.children.values():
+                self.calc_stratagy(child, position)
             return
         
         for hand_id, gamestate in node.states.items():
             # calculate positive regrets
+            if gamestate.player != position:
+                continue
+
             positive_regrets = {action: max(regret, 0) for action, regret in gamestate.regret.items()}
             total_positive_regret = sum(positive_regrets.values())
             if total_positive_regret > 0:
@@ -66,6 +195,25 @@ class CFRSolver:
                 num_actions = len(gamestate.strategy)
                 for action in gamestate.strategy.keys():
                     gamestate.strategy[action] = 1.0 / num_actions
+            
+            for action in gamestate.strategy.keys():
+                node.children[action].reach[hand_id] = node.reach.get(hand_id, 0.0) * gamestate.strategy[action]
         
         for child in node.children.values():
-            self.recalc_strategies(child)
+            self.calc_stratagy(child, position)
+
+    def propagate_reach(self, node: Node) -> None:
+        def propagate(curr: Node) -> None:
+            if curr.state == 'showdown' or curr.state == 'fold':
+                return
+            
+            for hand_id, gamestate in curr.states.items():
+                for action in gamestate.strategy.keys():
+                    if action in curr.children:
+                        curr.children[action].reach[hand_id] = curr.reach.get(hand_id, 1.0) * gamestate.strategy[action]
+            
+            for child in curr.children.values():
+                propagate(child)
+    
+        propagate(node)
+            

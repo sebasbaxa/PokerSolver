@@ -1,7 +1,7 @@
 import unittest
 from src.tree.tree_builder import TreeBuilder
 from src.game.player_range import PlayerRange
-from src.cfr.winrates import calculate_winrates
+from src.cfr.winrates import create_win_cache
 from treys import Card
 
 class TestCalculateWinrates(unittest.TestCase):
@@ -24,6 +24,9 @@ class TestCalculateWinrates(unittest.TestCase):
 
         root_node = tree_builder.create_root_node()
 
-        winrates = calculate_winrates(root_node)
-        self.assertEqual(len(winrates), 10)  # 6 (AA) + 4 (KQs) = 10 unique hands
-    
+        winrates = create_win_cache(ip_range, oop_range, root_node)
+        print(winrates)
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -89,8 +89,8 @@ def create_call_child(node: Node) -> Node:
             call_child.states = copy.deepcopy(node.states)  # carry over states
             return call_child
 
-        # IP call logic
-        elif node.turn == 'IP':
+        # regular call logic
+        else:
             if node.street == 'flop':
                 next_street = 'turn'
             elif node.street == 'turn':
@@ -101,13 +101,7 @@ def create_call_child(node: Node) -> Node:
             call_child.raise_count = 0 # reset raise count
             call_child.states = copy.deepcopy(node.states)  # carry over states
             return call_child
-        
-        # OOP call logic
-        else:
-            call_child = Node('IP', 'action', node.street,
-                            new_stacks, new_contributions, new_pot)
-            call_child.states = copy.deepcopy(node.states)  # carry over states
-            return call_child
+
 
 def create_raise_child(node: Node) -> Node:
 

@@ -13,6 +13,7 @@ class TreeBuilder:
         self.root = None
         self.flop = flop
 
+    # creates first node in the game tree with all gamestates for player hands in their ranges
     def create_root_node(self) -> Node:
         root = Node('OOP', 'action', 'flop', self.stacks, self.contributions, self.pot)
 
@@ -42,6 +43,7 @@ class TreeBuilder:
 
             # add the new state to the node's states dictionary
             root.states[hand_id] = gamestate
+            root.reach[hand_id] = 1.0
         
         return root
 
@@ -54,7 +56,7 @@ class TreeBuilder:
     def recursive_build(self, node: Node):
         if node.state == 'showdown' or node.state == 'fold':
             return
-        
+
         self.create_children(node)
         for action, child in node.children.items():
             self.recursive_build(child)
@@ -76,3 +78,9 @@ class TreeBuilder:
         # Raise child
         raise_child = create_raise_child(node)
         node.children['raise'] = raise_child
+
+        for action, child in node.children.items():
+            child.reach = {}
+            for hand_id in node.states.keys():
+                prob = node.states[hand_id].strategy.get(action, 0.0)
+                child.reach[hand_id] = node.reach.get(hand_id, 0.0) * prob

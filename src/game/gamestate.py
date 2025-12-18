@@ -4,6 +4,8 @@ from src.core.deck import Deck
 from src.core.hand import Hand
 from src.core.range import Range
 from src.game.player_range import PlayerRange
+from typing import Dict
+
 
 
 class GameState:
@@ -24,9 +26,9 @@ class GameState:
 
         # starting values
         self.value = 0.0
-        self.regret = {"call":0, "raise":0, "fold":0}
-        self.strategy = {"call":0.333, "raise":0.333, "fold":0.333}
-        self.evs = {"call":0, "raise":0, "fold":0}
+        self.strategy = {'fold': 0.333, 'call': 0.333, 'raise': 0.333}
+        self.evs = {'fold': 0.0, 'call': 0.0, 'raise': 0.0}
+        self.regret = {'fold': 0.0, 'call': 0.0, 'raise': 0.0}
 
     def set_opponent_range(self, opponent_range) -> None:
         if not isinstance(opponent_range, PlayerRange):
@@ -77,7 +79,8 @@ class GameState:
                 }
 
     def __repr__(self) -> str:
-        return f"GameState(player={self.player}, player_hand={self.player_hand},  strategy={self.strategy})\n"
+        formatted_strategy = ", ".join([f"{action}: {prob:.3f}" for action, prob in self.strategy.items()])
+        return f"(value {self.value}, strategy={{ {formatted_strategy} }})"
     
 
         
