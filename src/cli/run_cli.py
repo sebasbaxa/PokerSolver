@@ -20,12 +20,19 @@ def run_cli():
         info['pot'],
         info['flop']
     )
+
+    print("Generating game tree...")
     tree_builder.generate_tree()
     root = tree_builder.root
-    win_cache = create_win_cache(ranges['IP'], ranges['OOP'], root)
-    cfr_solver = CFRSolver(root, win_cache)
+    print("Game tree generated.")
 
-    for _ in range(500):
+    print("Generating win rate cache...")
+    win_cache = create_win_cache(ranges['IP'], ranges['OOP'], root)
+    print("Win rate cache generated.")
+
+    print(f"Running CFR with {inters} iterations...")
+    cfr_solver = CFRSolver(root, win_cache)
+    for _ in range(int(inters)):
             cfr_solver.calc_stratagy(root, 'IP')
             cfr_solver.calc_stratagy(root, 'OOP')
             cfr_solver.propagate_reach(root)
