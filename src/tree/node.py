@@ -26,8 +26,9 @@ class Node:
     
     def __repr__(self) -> str:
         output =  f"Node: turn={self.turn}, street={self.street}, state={self.state}, pot={self.pot}, stacks={self.stacks}, contributions={self.contributions}\n"
+        for id, reach_prob in self.reach.items():
+            output += f"  Hand ID: {id}, Reach Probability: {reach_prob}\n"
         output += "\n States:\n"
         for state_id, gamestate in self.states.items():
-            if state_id.startswith(self.turn):
-                output += f"  State ID: {state_id}, Gamestate: {gamestate}\n"
+            output += f"  State ID: {state_id}, Gamestate: {gamestate}\n"
         return output

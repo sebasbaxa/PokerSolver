@@ -35,10 +35,10 @@ class TestCFR(unittest.TestCase):
 
 
         for _ in range(500):
-            cfr_solver.calc_stratagy(root_node, 'IP')
-            cfr_solver.calc_stratagy(root_node, 'OOP')
-            cfr_solver.propagate_reach(root_node)
-            cfr_solver.calc_IP_values(root_node)
-            cfr_solver.calc_OOP_values(root_node)
-        
+            cfr_solver.calc_strategy(root_node, 'IP')
+            cfr_solver.calc_strategy(root_node, 'OOP')
+            cfr_solver.propagate_reach(root_node)  
+            cfr_solver.calc_values(root_node, 'OOP')
+            cfr_solver.calc_values(root_node, 'IP')
+
         traverse_tree(root_node)
