@@ -33,11 +33,11 @@ def run_cli():
     print(f"Running CFR with {inters} iterations...")
     cfr_solver = CFRSolver(root, win_cache)
     for _ in range(int(inters)):
-            cfr_solver.calc_stratagy(root, 'IP')
-            cfr_solver.calc_stratagy(root, 'OOP')
+            cfr_solver.calc_strategy(root, 'IP')
+            cfr_solver.calc_strategy(root, 'OOP')
             cfr_solver.propagate_reach(root)
-            cfr_solver.calc_IP_values(root)
-            cfr_solver.calc_OOP_values(root)
+            cfr_solver.calc_strategy(root, 'IP')
+            cfr_solver.calc_strategy(root, 'OOP')
         
     traverse_tree(root)
 
