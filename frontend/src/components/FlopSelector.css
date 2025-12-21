@@ -1,0 +1,117 @@
+.flop-selector {
+  width: 100%;
+}
+
+.flop-display {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.empty-flop {
+  padding: 20px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  color: #666;
+  font-style: italic;
+  flex: 1;
+}
+
+.selected-cards {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+}
+
+.flop-card {
+  width: 60px;
+  height: 80px;
+  border: 2px solid #333;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  background: white;
+}
+
+.flop-card.red {
+  color: #e74c3c;
+}
+
+.flop-card.black {
+  color: #2c3e50;
+}
+
+.select-flop-button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.select-flop-button:hover {
+  background-color: #2980b9;
+}
+
+.clear-button {
+  padding: 10px 20px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.clear-button:hover {
+  background-color: #c0392b;
+}
+
+.card-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.rank-row {
+  display: flex;
+  gap: 5px;
+}
+
+.card-button {
+  width: 50px;
+  height: 60px;
+  border: 2px solid #333;
+  border-radius: 6px;
+  background: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.card-button:hover:not(.disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.card-button.selected {
+  background-color: #3498db;
+  color: white !important;
+  border-color: #2980b9;
+}
+
+.card-button.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}

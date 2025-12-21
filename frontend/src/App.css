@@ -40,3 +40,137 @@
 .read-the-docs {
   color: #888;
 }
+
+.setup-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.setup-section {
+  margin: 30px 0;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.setup-section h2 {
+  margin-top: 0;
+}
+
+.range-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.range-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+}
+
+.range-button:hover {
+  background-color: #45a049;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.close-button {
+  font-size: 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.modal-footer {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.done-button {
+  padding: 10px 20px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.solve-button {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 30px;
+}
+
+.solve-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+
+.stack-input, .pot-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.stack-input label, .pot-input label {
+  min-width: 100px;
+  font-weight: 500;
+}
+
+.input-field {
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 120px;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.unit {
+  color: #666;
+  font-weight: 500;
+}
