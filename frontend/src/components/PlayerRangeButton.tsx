@@ -16,7 +16,7 @@ export default function PlayerRangeButton({ player, selectedHands, onRangeChange
         onClick={() => setIsOpen(true)}
         className="range-button"
       >
-        {player} Range ({selectedHands.length} hands)
+        {player} Range
       </button>
 
       {isOpen && (

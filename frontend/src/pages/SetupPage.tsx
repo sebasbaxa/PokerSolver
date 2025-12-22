@@ -28,35 +28,39 @@ export default function SetupPage() {
     <div className="setup-page">
       <h1>Poker Solver Setup</h1>
       
-      <div className="setup-section">
-        <h2>Stack Sizes</h2>
-        <StackInput label="OOP Stack" value={oopStack} onChange={setOopStack} />
-        <StackInput label="IP Stack" value={ipStack} onChange={setIpStack} />
+      <div className="setup-row">
+        <div className="setup-section half-width">
+          <h2>Stack Sizes</h2>
+          <StackInput label="OOP Stack" value={oopStack} onChange={setOopStack} />
+          <StackInput label="IP Stack" value={ipStack} onChange={setIpStack} />
+        </div>
+
+        <div className="setup-section half-width">
+          <h2>Pot Size</h2>
+          <PotInput value={pot} onChange={setPot} />
+        </div>
       </div>
 
-      <div className="setup-section">
-        <h2>Pot Size</h2>
-        <PotInput value={pot} onChange={setPot} />
-      </div>
+      <div className="setup-row">
+        <div className="setup-section half-width">
+          <h2>Flop</h2>
+          <FlopSelector selectedCards={flop} onCardsChange={setFlop} />
+        </div>
 
-      <div className="setup-section">
-        <h2>Flop</h2>
-        <FlopSelector selectedCards={flop} onCardsChange={setFlop} />
-      </div>
-
-      <div className="setup-section">
-        <h2>Player Ranges</h2>
-        <div className="range-buttons">
-          <PlayerRangeButton
-            player="OOP"
-            selectedHands={oopRange}
-            onRangeChange={setOopRange}
-          />
-          <PlayerRangeButton
-            player="IP"
-            selectedHands={ipRange}
-            onRangeChange={setIpRange}
-          />
+        <div className="setup-section half-width">
+          <h2>Player Ranges</h2>
+          <div className="range-buttons">
+            <PlayerRangeButton
+              player="OOP"
+              selectedHands={oopRange}
+              onRangeChange={setOopRange}
+            />
+            <PlayerRangeButton
+              player="IP"
+              selectedHands={ipRange}
+              onRangeChange={setIpRange}
+            />
+          </div>
         </div>
       </div>
 

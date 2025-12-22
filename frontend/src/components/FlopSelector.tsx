@@ -36,7 +36,7 @@ export default function FlopSelector({ selectedCards, onCardsChange }: FlopSelec
     <div className="flop-selector">
       <div className="flop-display">
         {selectedCards.length === 0 ? (
-          <div className="empty-flop">Click to select flop cards</div>
+          <div className="empty-flop">Select flop cards</div>
         ) : (
           <div className="selected-cards">
             {selectedCards.map((card, idx) => (
