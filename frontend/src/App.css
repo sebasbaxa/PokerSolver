@@ -106,7 +106,7 @@
 
 .modal-content {
   background: white;
-  padding: 20px;
+  padding: 12px;
   border-radius: 8px;
   max-width: 90%;
   max-height: 90%;
@@ -117,19 +117,30 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee; /* Add separator line */
 }
 
 .close-button {
-  font-size: 24px;
+  font-size: 28px; /* Slightly larger for better clickability */
   border: none;
   background: none;
   cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  color: #666;
+}
+
+.close-button:hover {
+  color: #333;
 }
 
 .modal-footer {
-  margin-top: 20px;
+  margin-top: 8px;
+  padding-top: 8px;
   text-align: right;
+  border-top: 1px solid #eee; /* Add separator line */
 }
 
 .done-button {

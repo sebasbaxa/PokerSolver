@@ -7,7 +7,6 @@ router = APIRouter(prefix="/api/solver", tags=["solver"])
 
 
 class SolverRequest(BaseModel):
-    iterations: int
     oop_range: List[str]
     ip_range: List[str]
     oop_stack: int
@@ -20,7 +19,6 @@ class SolverRequest(BaseModel):
 class SolverResponse(BaseModel):
     oop_strategy: List[dict]
     ip_strategy: List[dict]
-    iterations: int
     message: str
     
 
@@ -36,7 +34,6 @@ async def solve_game(request: SolverRequest):
             oop_contribution=request.oop_contribution,
             ip_contribution=request.ip_contribution,
             pot=request.pot,
-            iterations=request.iterations,
             flop=request.flop
         )
     except Exception as e:
@@ -45,6 +42,5 @@ async def solve_game(request: SolverRequest):
     return SolverResponse(
         oop_strategy=result['oop_strategy'],
         ip_strategy=result['ip_strategy'],
-        iterations=result['iterations'],
         message="Game solved successfully",
     )

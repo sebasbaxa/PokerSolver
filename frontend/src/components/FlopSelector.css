@@ -7,6 +7,7 @@
   gap: 10px;
   align-items: center;
   margin-bottom: 15px;
+  height: 80px; 
 }
 
 .empty-flop {
@@ -15,13 +16,18 @@
   border-radius: 8px;
   color: #666;
   font-style: italic;
-  flex: 1;
+  width: 200px; 
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .selected-cards {
   display: flex;
   gap: 10px;
-  flex: 1;
+  width: 200px; /* Fixed width for 3 cards (60px * 3 + 20px gaps) */
 }
 
 .flop-card {
@@ -35,6 +41,8 @@
   font-size: 24px;
   font-weight: bold;
   background: white;
+  padding: 8px; 
+  box-sizing: border-box; 
 }
 
 .flop-card.red {
@@ -83,28 +91,34 @@
 .card-grid {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 15px;
+  gap: 3px;
+  padding: 8px;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f9f9f9;
+  max-width: fit-content;
 }
 
 .rank-row {
   display: flex;
-  gap: 5px;
+  gap: 3px;
 }
 
 .card-button {
-  width: 35px;   
-  height: 45px;      
+  width: 32px;   
+  height: 40px;      
   border: 1px solid #333;  
   border-radius: 4px;
   background: white;
-  font-size: 12px;    
+  font-size: 11px;    
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s;
+  padding: 2px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .card-button:hover:not(.disabled) {

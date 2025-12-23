@@ -8,7 +8,7 @@ from typing import List
 
 
 # takes in ranges, stacks, contributions, pot size, number of iterations from API and returns solved game tree
-def solve(oop_range: List[str], ip_range: List[str], oop_stack: int, ip_stack: int, oop_contribution: int, ip_contribution: int, pot: int, iterations: int, flop: List[str]) -> dict:
+def solve(oop_range: List[str], ip_range: List[str], oop_stack: int, ip_stack: int, oop_contribution: int, ip_contribution: int, pot: int, flop: List[str]) -> dict:
     oop_player_range = parse_hand_range(oop_range, 'OOP')
     ip_player_range = parse_hand_range(ip_range, 'IP')
 
@@ -28,7 +28,8 @@ def solve(oop_range: List[str], ip_range: List[str], oop_stack: int, ip_stack: i
     cfr_solver = CFRSolver(root_node, win_cache)
 
     # solving game tree with CFR
-    for _ in range(iterations):
+    for _ in range(500):
+        print('solving')
         cfr_solver.calc_strategy(root_node, 'IP')
         cfr_solver.calc_strategy(root_node, 'OOP')
         cfr_solver.propagate_reach(root_node)
@@ -57,7 +58,6 @@ def solve(oop_range: List[str], ip_range: List[str], oop_stack: int, ip_stack: i
     
     return {'oop_strategy': oop_strategies,
              'ip_strategy': ip_strategies,
-               'iterations': iterations
         }
 
 
