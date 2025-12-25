@@ -3,8 +3,69 @@ from treys import Evaluator
 from src.game.player_range import PlayerRange
 import random
 import copy
+from multiprocessing import Pool, cpu_count
+import itertools
 
 
+
+def evaluate_matchup(args):
+    ip_hand, oop_hand, flop, deck_cards = args
+    evaluator = Evaluator()
+    results = {'IP_wins': 0, 'OOP_wins': 0, 'ties': 0}
+    
+    valid_cards = [card for card in deck_cards 
+                   if card not in ip_hand.cards and card not in oop_hand.cards]
+    
+    for turn in valid_cards:
+        runout = flop + [turn]
+        for river in [card for card in valid_cards if card != turn]:
+            full_runout = runout + [river]
+            
+            ip_score = evaluator.evaluate(ip_hand.cards, full_runout)
+            oop_score = evaluator.evaluate(oop_hand.cards, full_runout)
+            
+            if ip_score < oop_score:
+                results['IP_wins'] += 1
+            elif oop_score < ip_score:
+                results['OOP_wins'] += 1
+            else:
+                results['ties'] += 1
+    
+    return (str(ip_hand), str(oop_hand), results)
+
+def create_win_cache_parallel(IPrange: PlayerRange, OOPrange: PlayerRange, root: Node) -> dict:
+    gamestate = root.states[next(iter(root.states))]
+    flop = copy.deepcopy(gamestate.community_cards)
+    deck_cards = gamestate.deck.cards
+    
+    # Filter valid hands
+    valid_ip_hands = [h for h in IPrange.get_hands() if not any(c in flop for c in h.cards)]
+    valid_oop_hands = [h for h in OOPrange.get_hands() if not any(c in flop for c in h.cards)]
+    
+    # Create matchup arguments
+    matchups = [(ip_hand, oop_hand, flop, deck_cards) 
+                for ip_hand in valid_ip_hands 
+                for oop_hand in valid_oop_hands]
+    
+    # Process in parallel
+    with Pool(cpu_count()) as pool:
+        results = pool.map(evaluate_matchup, matchups)
+    
+    # Build cache
+    win_cache = {}
+    for ip_str, oop_str, res in results:
+        ip_key = f"IP{ip_str}"
+        oop_key = f"OOP{oop_str}"
+        
+        if ip_key not in win_cache:
+            win_cache[ip_key] = {}
+        if oop_key not in win_cache:
+            win_cache[oop_key] = {}
+            
+        win_cache[ip_key][oop_key] = res
+        win_cache[oop_key][ip_key] = res
+    
+    return win_cache
 
 
 def sample_hand_by_reach(node: Node, prefix: str) -> str:

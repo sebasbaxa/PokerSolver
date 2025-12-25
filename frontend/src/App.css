@@ -227,7 +227,7 @@
   background-color: #2980b9;
 }
 
-.results-content {
+.results-content-old {
   display: flex;
   flex-direction: column;
   gap: 20px;

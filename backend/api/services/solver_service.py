@@ -1,5 +1,5 @@
 from src.cfr.cfr import CFRSolver
-from src.cfr.winrates import create_win_cache
+from src.cfr.winrates import create_win_cache, create_win_cache_parallel
 from src.tree.tree_builder import TreeBuilder
 from api.services.range_service import parse_hand_range
 from src.core.id import get_hand_from_id
@@ -29,7 +29,7 @@ def solve(oop_range: List[str], ip_range: List[str], oop_stack: int, ip_stack: i
     print("game tree generated.")
 
     print("creating win cache...")
-    win_cache = create_win_cache(ip_player_range, oop_player_range, root_node)
+    win_cache = create_win_cache_parallel(ip_player_range, oop_player_range, root_node)
     print("win cache created.")
     cfr_solver = CFRSolver(root_node, win_cache)
 
