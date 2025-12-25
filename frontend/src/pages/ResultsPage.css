@@ -1,0 +1,254 @@
+.results-page {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.back-button:hover {
+  background-color: #2980b9;
+}
+
+/* Tree Explorer Placeholder */
+.tree-explorer-placeholder {
+  background-color: #f5f5f5;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.tree-explorer-placeholder h3 {
+  margin: 0 0 10px 0;
+  color: #666;
+}
+
+.tree-explorer-placeholder p {
+  margin: 0;
+  color: #999;
+}
+
+/* Main Content Layout */
+.results-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* Strategy Grid Container */
+.strategy-grid-container {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.strategy-grid-container h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* Hand Category Grid */
+.hand-category-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background-color: #e0e0e0;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.grid-row {
+  display: flex;
+  gap: 2px;
+}
+
+.grid-cell {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  background: white;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: default;
+  transition: all 0.2s;
+}
+
+.grid-cell.in-range {
+  cursor: pointer;
+  background: #f9f9f9;
+}
+
+.grid-cell.in-range:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.grid-cell.selected {
+  border: 2px solid #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.3);
+}
+
+.grid-cell.out-of-range {
+  background: #f0f0f0;
+  color: #ccc;
+}
+
+.cell-label {
+  font-size: 11px;
+  font-weight: bold;
+  padding: 2px;
+  z-index: 2;
+}
+
+/* Strategy Bar Visualization */
+.strategy-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  pointer-events: none;
+}
+
+.raise-bar,
+.call-bar,
+.fold-bar {
+  width: 100%;
+  transition: height 0.3s;
+}
+
+.raise-bar {
+  background-color: rgba(231, 76, 60, 0.7);
+}
+
+.call-bar {
+  background-color: rgba(46, 204, 113, 0.7);
+}
+
+.fold-bar {
+  background-color: rgba(52, 152, 219, 0.7);
+}
+
+/* Detailed Hand View */
+.detailed-hand-view {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+.detailed-hand-view h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.category-summary {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.action-stat {
+  flex: 1;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+
+.action-stat.raise {
+  background-color: #e74c3c;
+}
+
+.action-stat.call {
+  background-color: #2ecc71;
+}
+
+.action-stat.fold {
+  background-color: #3498db;
+}
+
+.specific-hands-grid-placeholder {
+  background-color: #f9f9f9;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.specific-hands-grid-placeholder h3 {
+  margin-top: 0;
+  color: #666;
+}
+
+.no-selection {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+.hands-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.hand-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.hand-label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.hand-strategy-mini {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.hand-strategy-mini .raise {
+  color: #e74c3c;
+}
+
+.hand-strategy-mini .call {
+  color: #2ecc71;
+}
+
+.hand-strategy-mini .fold {
+  color: #3498db;
+}
