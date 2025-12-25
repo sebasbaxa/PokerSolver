@@ -22,14 +22,23 @@ def solve(oop_range: List[str], ip_range: List[str], oop_stack: int, ip_stack: i
 
     # generate game tree
     tree_builder = TreeBuilder(ranges, stacks, contributions, pot, flop_cards)
+
+    print("generating game tree...")
     tree_builder.generate_tree()
     root_node = tree_builder.root
+    print("game tree generated.")
+
+    print("creating win cache...")
     win_cache = create_win_cache(ip_player_range, oop_player_range, root_node)
+    print("win cache created.")
     cfr_solver = CFRSolver(root_node, win_cache)
 
     # solving game tree with CFR
-    for _ in range(500):
-        print('solving')
+    print('solving...')
+
+    # TODO: can create a way to pass in number of iterations from API later
+    for _ in range(200):
+        print(f'Iteration {_+1}/200') 
         cfr_solver.calc_strategy(root_node, 'IP')
         cfr_solver.calc_strategy(root_node, 'OOP')
         cfr_solver.propagate_reach(root_node)
