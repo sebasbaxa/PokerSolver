@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import type { SolveResponse } from '../api/solver';
+import SpecificHandsGrid from '../components/SpecificHandsGrid';
 import './ResultsPage.css';
 
 interface HandStrategy {
@@ -39,6 +40,8 @@ export default function ResultsPage() {
   const parseStrategy = (strategy: any[]): Map<string, CategoryStrategy> => {
     const categoryMap = new Map<string, CategoryStrategy>();
 
+    console.log('Parsing strategy:', strategy);
+
     strategy.forEach((item) => {
       const hand = item.hand;
       const category = getHandCategory(hand);
@@ -49,6 +52,8 @@ export default function ResultsPage() {
         call: item.call || 0,
         fold: item.fold || 0,
       };
+
+      console.log('Hand:', hand, 'Category:', category, 'Strategy:', handStrategy);
 
       if (!categoryMap.has(category)) {
         categoryMap.set(category, {
@@ -71,6 +76,7 @@ export default function ResultsPage() {
       cat.avgFold = cat.hands.reduce((sum, h) => sum + h.fold, 0) / count;
     });
 
+    console.log('Category data:', categoryMap);
     return categoryMap;
   };
 
@@ -138,7 +144,7 @@ export default function ResultsPage() {
 
       {/* Placeholder for Tree Explorer */}
       <div className="tree-explorer-placeholder">
-        <h3>Tree Explorer (To be Implemented)</h3>
+        <h3>Tree Explorer (Coming Soon)</h3>
         <p>Navigate through the game tree to view strategies at different nodes</p>
       </div>
 
@@ -189,7 +195,7 @@ export default function ResultsPage() {
           </div>
         </div>
 
-        {/* Detailed Hand View Placeholder */}
+        {/* Detailed Hand View */}
         <div className="detailed-hand-view">
           {selectedCategoryData ? (
             <>
@@ -205,21 +211,10 @@ export default function ResultsPage() {
                   Fold: {(selectedCategoryData.avgFold * 100).toFixed(1)}%
                 </div>
               </div>
-              <div className="specific-hands-grid-placeholder">
-                <h3>Specific Hands Grid (To be Implemented)</h3>
-                <div className="hands-list">
-                  {selectedCategoryData.hands.map((hand, idx) => (
-                    <div key={idx} className="hand-item">
-                      <span className="hand-label">{hand.hand}</span>
-                      <div className="hand-strategy-mini">
-                        <span className="raise">R: {(hand.raise * 100).toFixed(0)}%</span>
-                        <span className="call">C: {(hand.call * 100).toFixed(0)}%</span>
-                        <span className="fold">F: {(hand.fold * 100).toFixed(0)}%</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <SpecificHandsGrid 
+                hands={selectedCategoryData.hands} 
+                category={selectedCategoryData.category}
+              />
             </>
           ) : (
             <div className="no-selection">

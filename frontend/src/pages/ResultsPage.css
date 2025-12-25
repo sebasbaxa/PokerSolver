@@ -252,3 +252,47 @@
 .hand-strategy-mini .fold {
   color: #3498db;
 }
+
+.specific-hands-grid-placeholder {
+  margin-top: 20px;
+}
+
+.hands-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.hand-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.hand-label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.hand-strategy-mini {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.hand-strategy-mini .raise {
+  color: #e74c3c;
+}
+
+.hand-strategy-mini .call {
+  color: #2ecc71;
+}
+
+.hand-strategy-mini .fold {
+  color: #3498db;
+}

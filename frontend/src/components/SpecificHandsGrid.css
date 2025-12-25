@@ -1,0 +1,125 @@
+.specific-hands-grid-container {
+  width: 100%;
+}
+
+.specific-hands-grid-container h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.specific-hands-grid {
+  display: grid;
+  gap: 4px;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.specific-hand-cell {
+  position: relative;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.specific-hand-cell:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.hand-label-top {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.hand-display {
+  display: flex;
+  gap: 2px;
+  font-size: 13px;
+}
+
+.strategy-bar-specific {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column-reverse;
+  pointer-events: none;
+}
+
+.strategy-bar-specific .raise-bar,
+.strategy-bar-specific .call-bar,
+.strategy-bar-specific .fold-bar {
+  width: 100%;
+  transition: height 0.3s;
+}
+
+.strategy-bar-specific .raise-bar {
+  background-color: rgba(231, 76, 60, 0.7);
+}
+
+.strategy-bar-specific .call-bar {
+  background-color: rgba(46, 204, 113, 0.7);
+}
+
+.strategy-bar-specific .fold-bar {
+  background-color: rgba(52, 152, 219, 0.7);
+}
+
+.strategy-percentages {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  font-size: 10px;
+  font-weight: bold;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2px;
+  border-radius: 3px;
+  margin: 0 2px;
+}
+
+.raise-pct {
+  color: #e74c3c;
+}
+
+.call-pct {
+  color: #2ecc71;
+}
+
+.fold-pct {
+  color: #3498db;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .specific-hands-grid {
+    gap: 4px;
+  }
+  
+  .hand-label-top {
+    font-size: 11px;
+  }
+  
+  .strategy-percentages {
+    font-size: 8px;
+  }
+}
