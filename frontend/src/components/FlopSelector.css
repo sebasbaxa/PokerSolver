@@ -1,101 +1,108 @@
+/* ================================
+   FLOP SELECTOR COMPONENT
+   ================================ */
+
 .flop-selector {
   width: 100%;
 }
 
-.flop-display {
+.flop-selector .flop-display {
   display: flex;
-  gap: 10px;
+  gap: var(--spacing-md);
   align-items: center;
-  margin-bottom: 15px;
-  height: 80px; 
+  margin-bottom: var(--spacing-md);
+  min-height: 80px;
 }
 
 .empty-flop {
-  padding: 20px;
-  border: 2px dashed #ccc;
-  border-radius: 8px;
-  color: #666;
+  padding: var(--spacing-lg);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
   font-style: italic;
-  width: 200px; 
+  width: 200px;
   height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
+  background: transparent;
 }
 
 .selected-cards {
   display: flex;
-  gap: 10px;
-  width: 200px; /* Fixed width for 3 cards (60px * 3 + 20px gaps) */
+  gap: var(--spacing-sm);
 }
 
 .flop-card {
   width: 60px;
   height: 80px;
-  border: 2px solid #333;
-  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   background: white;
-  padding: 8px; 
-  box-sizing: border-box; 
+  box-shadow: var(--shadow-sm);
 }
 
 .flop-card.red {
-  color: #e74c3c;
+  color: var(--color-card-red);
 }
 
 .flop-card.black {
-  color: #2c3e50;
+  color: var(--color-card-black);
 }
 
 .select-flop-button {
-  padding: 10px 20px;
-  background-color: #3498db;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-accent-primary), #5a6fd6);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .select-flop-button:hover {
-  background-color: #2980b9;
+  background: linear-gradient(135deg, #5a6fd6, #4a5fc6);
+  transform: translateY(-1px);
 }
 
 .clear-button {
   width: 40px;
-  height: 50px;
-  padding: 10px 20px;
-  background-color: #e74c3c;
+  height: 40px;
+  padding: 0;
+  background: linear-gradient(135deg, var(--color-accent-danger), #c82333);
   color: white;
   border: none;
-  font-size: 14px;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-size: 14px;
-  text-align: center;  /* Add this */
-  display: flex;       /* Add this */
-  align-items: center; /* Add this */
-  justify-content: center; /* Add this */
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .clear-button:hover {
-  background-color: #c0392b;
+  background: linear-gradient(135deg, #e4606d, var(--color-accent-danger));
+  transform: translateY(-1px);
 }
 
+/* Card Selection Grid */
 .card-grid {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-tertiary);
   max-width: fit-content;
 }
 
@@ -105,34 +112,44 @@
 }
 
 .card-button {
-  width: 32px;   
-  height: 40px;      
-  border: 1px solid #333;  
-  border-radius: 4px;
+  width: 36px;
+  height: 44px;
+  border: 2px solid #e0e0e0;
+  border-radius: var(--radius-sm);
   background: white;
-  font-size: 11px;    
+  font-size: 12px;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   padding: 2px;
-  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.card-button:hover:not(.disabled) {
-  transform: scale(1.05);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+.card-button.red {
+  color: var(--color-card-red);
+}
+
+.card-button.black {
+  color: var(--color-card-black);
+}
+
+.card-button:hover:not(.disabled):not(.selected) {
+  transform: scale(1.08);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-accent-primary);
 }
 
 .card-button.selected {
-  background-color: #3498db;
+  background: linear-gradient(135deg, var(--color-accent-primary), #5a6fd6);
   color: white !important;
-  border-color: #2980b9;
+  border-color: var(--color-accent-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .card-button.disabled {
-  opacity: 0.3;
+  opacity: 0.25;
   cursor: not-allowed;
+  background: #e0e0e0;
 }

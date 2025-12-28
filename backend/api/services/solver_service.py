@@ -1,6 +1,7 @@
 from src.cfr.cfr import CFRSolver
 from src.cfr.winrates import create_win_cache, create_win_cache_parallel
 from src.tree.tree_builder import TreeBuilder
+from src.tree.tree_serializer import serialize_full_tree
 from api.services.range_service import parse_hand_range
 from src.core.id import get_hand_from_id
 from treys import Card
@@ -65,9 +66,14 @@ def solve(oop_range: List[str], ip_range: List[str], oop_stack: int, ip_stack: i
         else:
             ip_strategies.append(strategy)
     
-    return {'oop_strategy': oop_strategies,
-             'ip_strategy': ip_strategies,
-        }
+    # Serialize the entire game tree
+    tree_data = serialize_full_tree(root_node)
+    
+    return {
+        'oop_strategy': oop_strategies,
+        'ip_strategy': ip_strategies,
+        'tree_data': tree_data,
+    }
 
 
 def get_card_from_hand_id(hand_id: str) -> str:

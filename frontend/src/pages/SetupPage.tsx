@@ -49,17 +49,14 @@ export default function SetupPage() {
       const response = await solverApi.solve(req);
       console.log('Solver response:', response);
       
-      navigate('/results', { state: { result: response as SolveResponse } });
+      navigate('/results', { state: { result: response as SolveResponse, flop: flop } });
     } catch (err: any) {
       setError('Failed to solve the game. Please try again.');
       setLoading(false);
     } finally {
       setLoading(false);
     }
-    
 
-
-    // TODO: Call solver API
   };
 
   return (

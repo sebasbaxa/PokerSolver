@@ -26,22 +26,14 @@ export default function RangeGridSelector({ selectedHands, onHandsChange }: Rang
   };
 
   return (
-    <div className="relative">
-      {/* Grid container with fixed width to prevent layout shift */}
-      <div style={{ 
-        display: 'inline-block', 
-        backgroundColor: '#FFFFFF', 
-        padding: '16px', 
-        borderRadius: '8px', 
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-        width: 'fit-content',
-        minWidth: '750px',
-      }}>
+    <div className="range-grid-selector">
+      {/* Grid container */}
+      <div className="range-grid-container">
         {/* Column labels */}
-        <div style={{ display: 'grid', gridTemplateColumns: '32px repeat(13, 50px)', gap: 0, marginBottom: '4px' }}>
-          <div style={{ width: '32px' }} /> {/* Empty corner */}
+        <div className="grid-labels-row">
+          <div className="corner-cell" />
           {RANKS.map((rank) => (
-            <div key={rank} style={{ textAlign: 'center', fontSize: '12px', fontWeight: 'bold', color: '#4B5563', paddingBottom: '4px' }}>
+            <div key={rank} className="column-label">
               {rank}
             </div>
           ))}
@@ -49,9 +41,9 @@ export default function RangeGridSelector({ selectedHands, onHandsChange }: Rang
 
         {/* Grid rows */}
         {RANKS.map((rowRank, rowIndex) => (
-          <div key={rowRank} style={{ display: 'grid', gridTemplateColumns: '32px repeat(13, 50px)', gap: 0 }}>
+          <div key={rowRank} className="grid-data-row">
             {/* Row label */}
-            <div style={{ width: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 'bold', color: '#4B5563', paddingRight: '4px' }}>
+            <div className="row-label">
               {rowRank}
             </div>
 

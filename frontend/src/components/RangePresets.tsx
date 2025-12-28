@@ -24,17 +24,17 @@ export default function RangePresets() {
       });
   }, []);
 
-  if (loading) return <div className="p-4">Loading...</div>;
-  if (error) return <div className="p-4 text-red-600">{error}</div>;
-  if (!presets) return <div className="p-4">No presets available</div>;
+  if (loading) return <div className="presets-loading">Loading...</div>;
+  if (error) return <div className="presets-error">{error}</div>;
+  if (!presets) return <div className="presets-empty">No presets available</div>;
 
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Range Presets</h2>
+    <div className="presets-container">
+      <h2 className="presets-title">Range Presets</h2>
       {Object.entries(presets).map(([name, hands]) => (
-        <div key={name} className="mb-4 p-3 border rounded">
-          <h3 className="font-semibold capitalize">{name}</h3>
-          <p className="text-sm text-gray-600">
+        <div key={name} className="preset-item">
+          <h3 className="preset-name">{name}</h3>
+          <p className="preset-hands">
             {Array.isArray(hands) ? hands.join(', ') : 'Invalid data'}
           </p>
         </div>

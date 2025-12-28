@@ -16,11 +16,9 @@ export default function StackInput({ label, value, onChange }: StackInputProps) 
     <div className="stack-input">
       <label>{label}</label>
       <input
-        type="number"
+        // type="number"
         value={value}
         onChange={handleChange}
-        min="0"
-        step="0.5"
         className="input-field"
       />
       <span className="unit">BB</span>

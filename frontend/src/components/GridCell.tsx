@@ -17,10 +17,7 @@ export default function GridCell({
   onMouseLeave,
   onClick,
 }: GridCellProps) {
-  // Default color: light blueish gray
-  const defaultColor = '#E0E7EF';  // light blueish gray
-
-  // Build the style object
+  // Build the style object using CSS variables for dark theme
   const cellStyle: React.CSSProperties = {
     position: 'relative',
     display: 'flex',
@@ -30,22 +27,23 @@ export default function GridCell({
     aspectRatio: '1',
     width: '50px',
     height: '50px',
-    border: '1px solid #D1D5DB',
+    border: '1px solid var(--color-border)',
+    borderRadius: 'var(--radius-sm)',
     cursor: 'pointer',
     userSelect: 'none',
     transition: 'all 150ms',
-    backgroundColor: isSelected ? '#4ADE80' : defaultColor,
-    borderColor: isSelected ? '#16A34A' : '#9CA3AF',
+    backgroundColor: isSelected ? 'var(--color-accent-success)' : 'var(--color-bg-tertiary)',
+    borderColor: isSelected ? '#20863a' : 'var(--color-border)',
     fontWeight: isSelected ? 'bold' : 'normal',
     transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-    boxShadow: isHovered ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : 'none',
+    boxShadow: isHovered ? 'var(--shadow-md)' : 'none',
     zIndex: isHovered ? 10 : 1,
   };
 
   const handLabelStyle: React.CSSProperties = {
     fontSize: '13px',
     fontWeight: 600,
-    color: isSelected ? '#FFFFFF' : '#374151',
+    color: isSelected ? '#FFFFFF' : 'var(--color-text-primary)',
     marginBottom: '2px',
   };
 

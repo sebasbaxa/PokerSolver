@@ -15,11 +15,9 @@ export default function PotInput({ value, onChange }: PotInputProps) {
     <div className="pot-input">
       <label>Pot Size</label>
       <input
-        type="number"
+        // type="number"
         value={value}
         onChange={handleChange}
-        min="0"
-        step="0.5"
         className="input-field"
       />
       <span className="unit">BB</span>

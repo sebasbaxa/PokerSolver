@@ -57,6 +57,32 @@ export function getHandCategory(row: number, col: number): 'pair' | 'suited' | '
 }
 
 /**
+ * Convert a specific hand (e.g., "AsAh") to its category (e.g., "AA")
+ * @param hand - Specific hand string like "AsAh", "KsQs", "AhKd"
+ * @returns Hand category like "AA", "KQs", "AKo"
+ */
+export function getHandCategoryFromSpecific(hand: string): string {
+  if (hand.length < 4) return hand; // Already a category
+  
+  const rank1 = hand[0];
+  const suit1 = hand[1];
+  const rank2 = hand[2];
+  const suit2 = hand[3];
+
+  if (rank1 === rank2) {
+    return `${rank1}${rank2}`; // Pocket pair
+  }
+
+  const suited = suit1 === suit2;
+  const rankOrder = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
+  const [highRank, lowRank] = [rank1, rank2].sort((a, b) => 
+    rankOrder.indexOf(b) - rankOrder.indexOf(a)
+  );
+
+  return `${highRank}${lowRank}${suited ? 's' : 'o'}`;
+}
+
+/**
  * Calculate total combinations from a list of hands
  */
 export function getTotalCombos(hands: string[]): number {

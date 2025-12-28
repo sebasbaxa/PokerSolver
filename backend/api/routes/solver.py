@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import List
+from typing import List, Dict, Any
 from api.services.solver_service import solve
 
 router = APIRouter(prefix="/api/solver", tags=["solver"])
@@ -16,12 +16,13 @@ class SolverRequest(BaseModel):
     oop_contribution: int
     ip_contribution: int
 
+
 class SolverResponse(BaseModel):
     oop_strategy: List[dict]
     ip_strategy: List[dict]
     message: str
+    tree_data: Dict[str, Any]
     
-
 @router.post("/solve", response_model=SolverResponse)
 async def solve_game(request: SolverRequest):
     # use solver service to solve game 
@@ -43,4 +44,5 @@ async def solve_game(request: SolverRequest):
         oop_strategy=result['oop_strategy'],
         ip_strategy=result['ip_strategy'],
         message="Game solved successfully",
+        tree_data=result['tree_data'],
     )

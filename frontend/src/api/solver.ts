@@ -1,4 +1,5 @@
 import api from './client';
+import type { TreeNodeData } from '../types/tree';
 
 export interface SolveRequest {
     oop_range: string[];
@@ -23,11 +24,12 @@ export interface SolveResponse {
     message: string;
     oop_strategy: HandStrategy[];
     ip_strategy: HandStrategy[];
+    tree_data: TreeNodeData;
 }
 
 export const solverApi = {
     solve: async (request: SolveRequest) => {
         const response = await api.post<SolveResponse>('/solver/solve', request);
         return response.data;                                                       
-    }
+    },
 }
