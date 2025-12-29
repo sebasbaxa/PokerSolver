@@ -178,7 +178,7 @@ export default function NodeStrategyGrid({ strategies, player, isActingPlayer }:
                                     <span className="stat-value">{(selectedCategoryData.avgRaise * 100).toFixed(1)}%</span>
                                 </div>
                                 <div className="action-stat call">
-                                    <span className="stat-label">Call</span>
+                                    <span className="stat-label">Check/Call</span>
                                     <span className="stat-value">{(selectedCategoryData.avgCall * 100).toFixed(1)}%</span>
                                 </div>
                                 <div className="action-stat fold">
@@ -186,7 +186,7 @@ export default function NodeStrategyGrid({ strategies, player, isActingPlayer }:
                                     <span className="stat-value">{(selectedCategoryData.avgFold * 100).toFixed(1)}%</span>
                                 </div>
                                 <div className="action-stat ev">
-                                    <span className="stat-label">EV</span>
+                                    <span className="stat-label">AVG EV</span>
                                     <span className="stat-value">{formatEv(selectedCategoryData.avgEv)}</span>
                                 </div>
                             </div>
