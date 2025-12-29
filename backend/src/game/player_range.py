@@ -1,6 +1,7 @@
 from treys import Card
 from src.core.range import Range
 from src.core.hand import Hand
+from typing import List
 
 
 class PlayerRange:
@@ -20,6 +21,18 @@ class PlayerRange:
     
     def get_hands(self):
         return self.range.get_hands()
+    
+    def filter_blockers(self, board_cards: List[int]):
+        """
+        Remove hands that contain any card that appears on the board.
+        board_cards: list of treys Card integers representing the board
+        """
+        board_set = set(board_cards)
+        filtered_hands = [
+            hand for hand in self.range.get_hands()
+            if not any(card in board_set for card in hand.cards)
+        ]
+        self.range.hands = filtered_hands
 
     def add_pocket_pair(self, rank):
         # Adds all combinations of pocket pairs for the given rank to the range

@@ -169,6 +169,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     min-width: 120px;
+    color: white;
 }
 
 .action-button:disabled {
@@ -178,7 +179,7 @@
 
 .action-fold {
     background: linear-gradient(135deg, #6c757d, #5a636a);
-    color: white;
+    color: white !important;
 }
 
 .action-fold:hover:not(:disabled) {
@@ -188,7 +189,7 @@
 
 .action-call {
     background: linear-gradient(135deg, var(--color-accent-success), #20863a);
-    color: white;
+    color: white !important;
 }
 
 .action-call:hover:not(:disabled) {
@@ -198,7 +199,7 @@
 
 .action-raise {
     background: linear-gradient(135deg, var(--color-accent-danger), #c82333);
-    color: white;
+    color: white !important;
 }
 
 .action-raise:hover:not(:disabled) {
@@ -328,4 +329,125 @@
 
 .clear-filter:hover {
     background: var(--color-border-light);
+}
+
+/* Range Buttons */
+.range-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.range-button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.range-button:hover {
+    border-color: var(--color-accent-primary);
+    color: var(--color-text-primary);
+}
+
+.range-button.active {
+    background: var(--color-accent-primary);
+    border-color: var(--color-accent-primary);
+    color: white;
+}
+
+.range-button.oop {
+    border-color: var(--color-oop);
+}
+
+.range-button.oop:hover,
+.range-button.oop.active {
+    background: var(--color-oop);
+    border-color: var(--color-oop);
+    color: white;
+}
+
+.range-button.ip {
+    border-color: var(--color-ip);
+}
+
+.range-button.ip:hover,
+.range-button.ip.active {
+    background: var(--color-ip);
+    border-color: var(--color-ip);
+    color: white;
+}
+
+/* Range Modal */
+.range-modal {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.range-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.range-modal-header h4 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: 16px;
+}
+
+.close-modal {
+    background: var(--color-bg-hover);
+    border: none;
+    color: var(--color-text-primary);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.close-modal:hover {
+    background: var(--color-border-light);
+}
+
+.range-modal-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.range-category {
+    background: var(--color-bg-tertiary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: monospace;
+}
+
+.range-category .category-name {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.range-category .category-count {
+    color: var(--color-text-muted);
+    margin-left: 4px;
 }

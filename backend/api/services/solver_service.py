@@ -13,13 +13,16 @@ def solve(oop_range: List[str], ip_range: List[str], oop_stack: int, ip_stack: i
     oop_player_range = parse_hand_range(oop_range, 'OOP')
     ip_player_range = parse_hand_range(ip_range, 'IP')
 
+    # reconstrucing flop cards
+    flop_cards = [Card.new(card_str) for card_str in flop]
+
+    # Filter out hands that contain board cards (remove blockers)
+    oop_player_range.filter_blockers(flop_cards)
+    ip_player_range.filter_blockers(flop_cards)
+
     ranges = {'OOP': oop_player_range, 'IP': ip_player_range}
     stacks = {'OOP': oop_stack, 'IP': ip_stack}
     contributions = {'OOP': oop_contribution, 'IP': ip_contribution}
-
-
-    # reconstrucing flop cards
-    flop_cards = [Card.new(card_str) for card_str in flop]
 
     # generate game tree
     tree_builder = TreeBuilder(ranges, stacks, contributions, pot, flop_cards)

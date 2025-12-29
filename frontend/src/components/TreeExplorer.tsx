@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import type { TreeNodeData } from '../types/tree';
 import NodeStrategyGrid from './NodeStrategyGrid';
 import { getHandCategoryFromSpecific } from '../utils/handUtils';
@@ -10,8 +10,28 @@ interface TreeExplorerProps {
 
 export default function TreeExplorer({ treeData }: TreeExplorerProps) {
     const [currentNode, setCurrentNode] = useState<TreeNodeData>(treeData);
-    const [selectedPlayer, setSelectedPlayer] = useState<'OOP' | 'IP'>('OOP');
     const [handFilter, setHandFilter] = useState<string>('');
+    const [showRangeModal, setShowRangeModal] = useState<'OOP' | 'IP' | null>(null);
+
+    // Extract ranges from root node (all hands in strategy = player's range)
+    const ranges = useMemo(() => {
+        const oopHands = treeData.oop_strategy.map(s => s.hand);
+        const ipHands = treeData.ip_strategy.map(s => s.hand);
+        return { OOP: oopHands, IP: ipHands };
+    }, [treeData]);
+
+    // Group hands by category for range display
+    const groupHandsByCategory = useCallback((hands: string[]) => {
+        const categories: Record<string, string[]> = {};
+        for (const hand of hands) {
+            const category = getHandCategoryFromSpecific(hand);
+            if (!categories[category]) {
+                categories[category] = [];
+            }
+            categories[category].push(hand);
+        }
+        return categories;
+    }, []);
 
     // Navigate to a node by following the path through the tree structure
     const getNodeByPath = useCallback((path: string): TreeNodeData => {
@@ -63,8 +83,11 @@ export default function TreeExplorer({ treeData }: TreeExplorerProps) {
         setCurrentNode(treeData);
     }, [treeData]);
 
-    // Get strategies for the selected player
-    const strategies = selectedPlayer === 'OOP' 
+    // Get the acting player at current node
+    const actingPlayer = currentNode.turn;
+
+    // Get strategies for the acting player
+    const strategies = actingPlayer === 'OOP' 
         ? currentNode.oop_strategy 
         : currentNode.ip_strategy;
 
@@ -191,26 +214,26 @@ export default function TreeExplorer({ treeData }: TreeExplorerProps) {
             {currentNode.isTerminal && (
                 <div className={`terminal-message state-${currentNode.state}`}>
                     {currentNode.state === 'fold' 
-                        ? '🏳️ Player Folded - Terminal Node' 
-                        : '🎯 Showdown - Terminal Node'}
+                        ? ' Player Folded - Terminal Node' 
+                        : ' Showdown - Terminal Node'}
                 </div>
             )}
 
             {/* Strategy Controls */}
             <div className="strategy-controls">
-                <div className="player-toggle">
-                    <span className="control-label">View Strategy:</span>
+                <div className="range-buttons">
+                    <span className="control-label">View Ranges:</span>
                     <button
-                        className={`toggle-button ${selectedPlayer === 'OOP' ? 'active' : ''}`}
-                        onClick={() => setSelectedPlayer('OOP')}
+                        className={`range-button oop ${showRangeModal === 'OOP' ? 'active' : ''}`}
+                        onClick={() => setShowRangeModal(showRangeModal === 'OOP' ? null : 'OOP')}
                     >
-                        OOP
+                        OOP Range ({ranges.OOP.length})
                     </button>
                     <button
-                        className={`toggle-button ${selectedPlayer === 'IP' ? 'active' : ''}`}
-                        onClick={() => setSelectedPlayer('IP')}
+                        className={`range-button ip ${showRangeModal === 'IP' ? 'active' : ''}`}
+                        onClick={() => setShowRangeModal(showRangeModal === 'IP' ? null : 'IP')}
                     >
-                        IP
+                        IP Range ({ranges.IP.length})
                     </button>
                 </div>
                 <div className="hand-filter">
@@ -233,11 +256,34 @@ export default function TreeExplorer({ treeData }: TreeExplorerProps) {
                 </div>
             </div>
 
+            {/* Range Modal */}
+            {showRangeModal && (
+                <div className="range-modal">
+                    <div className="range-modal-header">
+                        <h4>{showRangeModal} Range ({ranges[showRangeModal].length} combos)</h4>
+                        <button 
+                            className="close-modal"
+                            onClick={() => setShowRangeModal(null)}
+                        >
+                            ✕
+                        </button>
+                    </div>
+                    <div className="range-modal-content">
+                        {Object.entries(groupHandsByCategory(ranges[showRangeModal])).map(([category, hands]) => (
+                            <div key={category} className="range-category">
+                                <span className="category-name">{category}</span>
+                                <span className="category-count">({hands.length})</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
             {/* Strategy Grid */}
             <NodeStrategyGrid 
                 strategies={filteredStrategies}
-                player={selectedPlayer}
-                isActingPlayer={selectedPlayer === currentNode.turn}
+                player={actingPlayer}
+                isActingPlayer={true}
             />
         </div>
     );

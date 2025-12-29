@@ -140,10 +140,11 @@
     padding: var(--spacing-md);
     max-height: 600px;
     overflow-y: auto;
+    color: var(--color-text-primary);
 }
 
 .category-details h4 {
-    color: var(--color-text-primary);
+    color: var(--color-text-primary) !important;
     font-size: 18px;
     margin-bottom: var(--spacing-md);
 }
@@ -185,35 +186,35 @@
 
 .stat-label {
     font-size: 12px;
-    color: var(--color-text-muted);
+    color: #a0a0c0 !important;
     text-transform: uppercase;
 }
 
 .stat-value {
     font-size: 20px;
     font-weight: 600;
-    color: var(--color-text-primary);
+    color: #ffffff !important;
 }
 
 .action-stat.raise .stat-value {
-    color: var(--color-accent-danger);
+    color: #ff6b6b !important;
 }
 
 .action-stat.call .stat-value {
-    color: var(--color-accent-success);
+    color: #51cf66 !important;
 }
 
 .action-stat.fold .stat-value {
-    color: var(--color-fold);
+    color: #ced4da !important;
 }
 
 .action-stat.ev .stat-value {
-    color: var(--color-accent-primary);
+    color: #748ffc !important;
 }
 
 /* Hands List */
 .hands-list h5 {
-    color: var(--color-text-secondary);
+    color: var(--color-text-secondary) !important;
     font-size: 14px;
     margin-bottom: var(--spacing-md);
     font-weight: 500;
@@ -230,10 +231,14 @@
     padding: var(--spacing-sm);
     background: var(--color-bg-secondary);
     border-radius: var(--radius-sm);
-    color: var(--color-text-muted);
+    color: var(--color-text-secondary) !important;
     font-weight: 500;
     text-transform: uppercase;
     font-size: 11px;
+}
+
+.table-header span {
+    color: var(--color-text-secondary) !important;
 }
 
 .table-row {
@@ -245,38 +250,43 @@
     transition: background 0.2s ease;
 }
 
+.table-row span {
+    color: var(--color-text-primary);
+}
+
 .table-row:hover {
     background: rgba(102, 126, 234, 0.1);
 }
 
 .hand-name {
     font-weight: 600;
-    color: var(--color-text-primary);
+    color: #ffffff !important;
     font-family: monospace;
 }
 
 .raise-value {
-    color: var(--color-accent-danger);
+    color: #ff6b6b !important;
 }
 
 .call-value {
-    color: var(--color-accent-success);
+    color: #51cf66 !important;
 }
 
 .fold-value {
-    color: var(--color-fold);
+    color: #ced4da !important;
 }
 
 .ev-value {
     font-weight: 500;
+    color: #ffffff !important;
 }
 
 .ev-value.positive {
-    color: var(--color-accent-success);
+    color: #51cf66 !important;
 }
 
 .ev-value.negative {
-    color: var(--color-accent-danger);
+    color: #ff6b6b !important;
 }
 
 /* No Selection */
@@ -285,8 +295,12 @@
     align-items: center;
     justify-content: center;
     height: 200px;
-    color: var(--color-text-muted);
+    color: var(--color-text-muted) !important;
     text-align: center;
+}
+
+.no-selection p {
+    color: var(--color-text-muted) !important;
 }
 
 /* Strategy Legend */
